@@ -138,3 +138,23 @@ class ImageFolder_new(data.Dataset):
         tmp = '    Target Transforms (if any): '
         fmt_str += '{0}{1}'.format(tmp, self.target_transform.__repr__().replace('\n', '\n' + ' ' * len(tmp)))
         return fmt_str
+
+def make_dataset_from_text(text_file):
+    data = []
+    with open(text_file, 'r') as f:
+        for item in f.readlines():
+            sample, label = item.rstrip('\n').split(' ')
+            data.append((sample, int(label)))
+
+    return data
+
+class DatasetTexts_new(ImageFolder_new):
+    def __init__(self, root, transform=None, target_transform=None,
+                 loader=default_loader):
+        self.samples = make_dataset_from_text(root)
+        self.imgs = self.samples
+        self.root = root
+        self.classes = set([s[1] for s in self.samples])
+        self.transform = transform
+        self.target_transform = target_transform
+        self.loader = loader

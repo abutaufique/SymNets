@@ -14,24 +14,24 @@ def train(source_train_loader, source_train_loader_batch, target_train_loader, t
     top1_target = AverageMeter()
     model.train()
     new_epoch_flag = False
-    end = time.time()    
+    end = time.time()
     try:
-        (input_source, target_source) = source_train_loader_batch.__next__()[1]
+        (input_source, target_source, _) = source_train_loader_batch.__next__()[1]
     except StopIteration:
         if epoch_count_dataset == 'source':
             epoch = epoch + 1
             new_epoch_flag = True
         source_train_loader_batch = enumerate(source_train_loader)
-        (input_source, target_source) = source_train_loader_batch.__next__()[1]
+        (input_source, target_source, _) = source_train_loader_batch.__next__()[1]
 
     try:
-        (input_target, _) = target_train_loader_batch.__next__()[1]
+        (input_target, _, _) = target_train_loader_batch.__next__()[1]
     except StopIteration:
         if epoch_count_dataset == 'target':
             epoch = epoch + 1
             new_epoch_flag = True
         target_train_loader_batch = enumerate(target_train_loader)
-        (input_target, _) = target_train_loader_batch.__next__()[1]
+        (input_target, _, _) = target_train_loader_batch.__next__()[1]
     data_time.update(time.time() - end)
 
     target_source_temp = target_source + args.num_classes
@@ -71,8 +71,8 @@ def train(source_train_loader, source_train_loader_batch, target_train_loader, t
     # mesure accuracy and record loss
     prec1_source, _ = accuracy(output_source.data[:, :args.num_classes], target_source, topk=(1,5))
     prec1_target, _ = accuracy(output_source.data[:, args.num_classes:], target_source, topk=(1,5))
-    losses_classifier.update(loss_classifier.data[0], input_source.size(0))
-    losses_G.update(loss_G.data[0], input_source.size(0))
+    losses_classifier.update(loss_classifier.item(), input_source.size(0))
+    losses_G.update(loss_G.item(), input_source.size(0))
     top1_source.update(prec1_source[0], input_source.size(0))
     top1_target.update(prec1_target[0], input_source.size(0))
 
@@ -83,14 +83,14 @@ def train(source_train_loader, source_train_loader_batch, target_train_loader, t
     for param in model.parameters():
         temp_grad.append(param.grad.data.clone())
     grad_for_classifier = temp_grad
-    
+
     optimizer.zero_grad()
     loss_G.backward()
     temp_grad = []
     for param in model.parameters():
         temp_grad.append(param.grad.data.clone())
     grad_for_featureExtractor = temp_grad
-    
+
     count = 0
     for param in model.parameters():
         temp_grad = param.grad.data.clone()
@@ -120,7 +120,7 @@ def train(source_train_loader, source_train_loader_batch, target_train_loader, t
             log.write("\n")
             log.write("Train:epoch: %d, loss@min: %4f, loss@max: %4f, Top1S acc: %3f, Top1T acc: %3f" % (epoch, losses_classifier.avg, losses_G.avg, top1_source.avg, top1_target.avg))
             log.close()
-    
+
     return source_train_loader_batch, target_train_loader_batch, epoch, new_epoch_flag
 
 
@@ -147,8 +147,8 @@ def validate(val_loader, model, criterion, epoch, args):
         prec1_source, _ = accuracy(output.data[:, :args.num_classes], target, topk=(1, 5))
         prec1_target, _ = accuracy(output.data[:, args.num_classes:], target, topk=(1, 5))
 
-        losses_source.update(loss_source.data[0], input.size(0))
-        losses_target.update(loss_target.data[0], input.size(0))
+        losses_source.update(loss_source.item(), input.size(0))
+        losses_target.update(loss_target.item(), input.size(0))
 
         top1_source.update(prec1_source[0], input.size(0))
         top1_target.update(prec1_target[0], input.size(0))

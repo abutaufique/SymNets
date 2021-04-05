@@ -9,7 +9,7 @@ import time
 import torch.backends.cudnn as cudnn
 import torch.nn as nn
 import torch.optim
-from data.prepare_data import generate_dataloader  # Prepare the data and dataloader
+from data.prepare_data import generate_dataloader, generate_dataloader_new  # Prepare the data and dataloader
 from models.resnet import resnet  # The model construction
 from opts import opts  # The options for the project
 from trainer import train  # For the training process
@@ -54,7 +54,7 @@ def main():
         ],
                                     lr=args.lr,
                                     momentum=args.momentum,
-                                    weight_decay=args.weight_decay, 
+                                    weight_decay=args.weight_decay,
                                     nesterov=True)
     elif args.arch.find('resnet') != -1:
         optimizer = torch.optim.SGD([
@@ -69,7 +69,7 @@ def main():
         ],
                                     lr=args.lr,
                                     momentum=args.momentum,
-                                    weight_decay=args.weight_decay, 
+                                    weight_decay=args.weight_decay,
                                     nesterov=True)
     else:
         raise ValueError('Unavailable model architecture!!!')
@@ -96,7 +96,7 @@ def main():
 
     cudnn.benchmark = True
     # process the data and prepare the dataloaders.
-    source_train_loader, source_val_loader, target_train_loader, val_loader = generate_dataloader(args)
+    source_train_loader, source_val_loader, target_train_loader, val_loader = generate_dataloader_new(args)
     #test only
     if args.test_only:
         validate(val_loader, model, criterion, -1, args)

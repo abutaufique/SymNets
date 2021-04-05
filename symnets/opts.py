@@ -20,8 +20,8 @@ def opts():
                         help='number of classes of data used to fine-tune the pre-trained model')
     # Optimization options
     parser.add_argument('--epochs', '-e', type=int, default=200, help='Number of epochs to train')
-    parser.add_argument('--batch_size_s', '-b-s', type=int, default=128, help='Batch size of the source data.')
-    parser.add_argument('--batch_size_t', '-b-t', type=int, default=128, help='Batch size of the target data.')
+    parser.add_argument('--batch_size_s', '-b-s', type=int, default=32, help='Batch size of the source data.')
+    parser.add_argument('--batch_size_t', '-b-t', type=int, default=32, help='Batch size of the target data.')
     parser.add_argument('--lr', '--learning_rate', type=float, default=0.01, help='The Learning Rate.')
     parser.add_argument('--momentum', '-m', type=float, default=0.9, help='Momentum.')
     parser.add_argument('--weight_decay', '-wd', type=float, default=0.0001, help='Weight decay (L2 penalty).')
