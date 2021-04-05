@@ -48,6 +48,7 @@ def opts():
                         metavar='N', help='print frequency (default: 10)')
     parser.add_argument('--score_frep', default=300, type=int,
                         metavar='N', help='print frequency (default: 300, not download score)')
+    parser.add_argument('--dtprefix', type=str, default='')
     args = parser.parse_args()
 
     args.log = args.log + '_' + args.src + '2' + args.tar + '_' + args.arch + '_' + args.flag

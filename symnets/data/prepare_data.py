@@ -80,9 +80,9 @@ def generate_dataloader_new(args):
     #     # split_train_test_images(args.data_path)
     #     raise ValueError('Null path of source train data!!!')
 
-    traindir_source = os.path.join(args.data_path_source, args.src +'_'+ str(args.num_classes) + '_list.txt')
-    traindir_target = os.path.join(args.data_path_source_t, args.src_t +'_'+ str(args.num_classes) + '_list.txt')
-    valdir = os.path.join(args.data_path_target, args.tar +'_'+ str(args.num_classes) + '_list.txt')
+    traindir_source = os.path.join(args.data_path_source, args.src +'_'+ str(args.num_classes)+ args.dtprefix + '_list.txt')
+    traindir_target = os.path.join(args.data_path_source_t, args.src_t +'_'+ str(args.num_classes) + args.dtprefix + '_list.txt')
+    valdir = os.path.join(args.data_path_target, args.tar +'_'+ str(args.num_classes) + args.dtprefix +'_list.txt')
     if not os.path.exists(traindir_source):
         raise ValueError('Null path of source train data!!!')
 

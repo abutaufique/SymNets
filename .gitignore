@@ -106,3 +106,4 @@ venv.bak/
 # checkpoints
 *.tar
 *.txt
+*.nfs*
